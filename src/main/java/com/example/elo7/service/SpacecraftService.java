@@ -2,9 +2,12 @@ package com.example.elo7.service;
 
 import com.example.elo7.dto.LandSpacecraftsDTO;
 import com.example.elo7.dto.MoveSpacecraftDTO;
+import com.example.elo7.dto.SpacecraftDTO;
 import com.example.elo7.dto.SpacecraftDetailsDTO;
 import com.example.elo7.entity.SpacecraftEntity;
+import com.example.elo7.exceptionHandler.IncorrectParameterException;
 import com.example.elo7.repository.SpacecraftRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +17,11 @@ public class SpacecraftService {
     @Autowired
     private SpacecraftRepository spacecraftRepository;
 
-    public SpacecraftEntity getSpacecraftPosition(String nameSpacecraft) {
-        return spacecraftRepository.findByNameSpacecraft(nameSpacecraft);
+    public SpacecraftDTO getSpacecraftPosition(String nameSpacecraft) {
+        SpacecraftDTO spacecraft = new SpacecraftDTO();
+        SpacecraftEntity entity = spacecraftRepository.findByNameSpacecraft(nameSpacecraft);
+        BeanUtils.copyProperties(entity, spacecraft);
+        return spacecraft;
     }
 
     public String landSpacecrafts(LandSpacecraftsDTO landSpacecraftsDTO) {
@@ -36,7 +42,7 @@ public class SpacecraftService {
         return "Landing was a success!";
     }
 
-    public String moveSpacecraft(MoveSpacecraftDTO moveSpacecraftDTO) {
+    public String moveSpacecraft(MoveSpacecraftDTO moveSpacecraftDTO) throws IncorrectParameterException {
         String[] moves = moveSpacecraftDTO.getMove().split("");
 
         for(String move : moves) {
@@ -89,7 +95,12 @@ public class SpacecraftService {
                 }
             }
 
-            spacecraftRepository.save(spacecraft);
+            if(spacecraft.getPositionH() < 0 || spacecraft.getPositionH() >= 6 ||
+                    spacecraft.getPositionV() < 0 || spacecraft.getPositionV() >= 6) {
+                throw new IncorrectParameterException("Your spacecraft can't move in this direction, out of planet bounds.");
+            } else {
+                spacecraftRepository.save(spacecraft);
+            }
         }
 
         return "You moved your spacecraft!";
