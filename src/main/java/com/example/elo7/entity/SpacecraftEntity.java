@@ -13,12 +13,11 @@ import javax.persistence.*;
 @Table(name = "tb_spacecraft")
 public class SpacecraftEntity {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id_spaceraft")
-//    private Integer idSpaceraft;
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_spaceraft")
+    private Integer idSpaceraft;
+
     @Column(name = "nm_spaceraft")
     private String nameSpacecraft;
 

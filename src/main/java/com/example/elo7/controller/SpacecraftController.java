@@ -6,10 +6,9 @@ import com.example.elo7.service.SpacecraftService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class SpacecraftController {
@@ -18,7 +17,7 @@ public class SpacecraftController {
     private SpacecraftService spacecraftService;
 
     @PostMapping("/land")
-    public ResponseEntity landSpacecraft(@RequestBody LandSpacecraftsDTO landSpacecraftsDTO) {
+    public ResponseEntity landSpacecraft(@Valid @RequestBody LandSpacecraftsDTO landSpacecraftsDTO) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(spacecraftService.landSpacecrafts(landSpacecraftsDTO));
         } catch (Exception e) {
@@ -33,7 +32,17 @@ public class SpacecraftController {
             return ResponseEntity.status(HttpStatus.OK).body(spacecraftService.moveSpacecraft(moveSpacecraftDTO));
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("It was not possible to land your spacecrafts.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("It was not possible to move your spacecraft.");
+        }
+    }
+
+    @GetMapping("/{nameSpacecraft}")
+    public ResponseEntity positionSpacecraft(@PathVariable String nameSpacecraft) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(spacecraftService.getSpacecraftPosition(nameSpacecraft));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("It was not possible to find your spacecraft.");
         }
     }
 }

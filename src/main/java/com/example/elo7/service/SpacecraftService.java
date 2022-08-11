@@ -14,52 +14,84 @@ public class SpacecraftService {
     @Autowired
     private SpacecraftRepository spacecraftRepository;
 
+    public SpacecraftEntity getSpacecraftPosition(String nameSpacecraft) {
+        return spacecraftRepository.findByNameSpacecraft(nameSpacecraft);
+    }
+
     public String landSpacecrafts(LandSpacecraftsDTO landSpacecraftsDTO) {
 
-        for(SpacecraftDetailsDTO item : landSpacecraftsDTO.getSpacecraftList()) {
-            SpacecraftEntity spacecraft = new SpacecraftEntity();
-            spacecraft.setNameSpacecraft(item.getNameSpacecraft());
-            spacecraft.setPlanetName(landSpacecraftsDTO.getPlanet());
-            spacecraft.setPositionFront(item.getPositionFront());
-            spacecraft.setPositionH(item.getPositionH());
-            spacecraft.setPositionV(item.getPositionV());
+        for(SpacecraftDetailsDTO spacecraft : landSpacecraftsDTO.getSpacecraftList()) {
+
+            SpacecraftEntity spacecraftEntity = new SpacecraftEntity();
+
+            spacecraftEntity.setNameSpacecraft(spacecraft.getNameSpacecraft());
+            spacecraftEntity.setPlanetName(landSpacecraftsDTO.getPlanet());
+            spacecraftEntity.setPositionFront(spacecraft.getPositionFront());
+            spacecraftEntity.setPositionH(spacecraft.getPositionH());
+            spacecraftEntity.setPositionV(spacecraft.getPositionV());
+
+            spacecraftRepository.save(spacecraftEntity);
+        }
+
+        return "Landing was a success!";
+    }
+
+    public String moveSpacecraft(MoveSpacecraftDTO moveSpacecraftDTO) {
+        String[] moves = moveSpacecraftDTO.getMove().split("");
+
+        for(String move : moves) {
+            SpacecraftEntity spacecraft = spacecraftRepository.findByNameSpacecraft(moveSpacecraftDTO.getNameSpacecraft());
+
+            if (move.equals("M")) {
+                switch (spacecraft.getPositionFront()) {
+                    case "N":
+                        spacecraft.setPositionV(spacecraft.getPositionV() + 1);
+                        break;
+                    case "S":
+                        spacecraft.setPositionV(spacecraft.getPositionV() - 1);
+                        break;
+                    case "E":
+                        spacecraft.setPositionH(spacecraft.getPositionH() + 1);
+                        break;
+                    default:
+                        spacecraft.setPositionH(spacecraft.getPositionH() - 1);
+                        break;
+                }
+            } else if (move.equals("L")) {
+                switch (spacecraft.getPositionFront()) {
+                    case "N":
+                        spacecraft.setPositionFront("W");
+                        break;
+                    case "E":
+                        spacecraft.setPositionFront("N");
+                        break;
+                    case "S":
+                        spacecraft.setPositionFront("E");
+                        break;
+                    default:
+                        spacecraft.setPositionFront("S");
+                        break;
+                }
+            } else {
+                switch (spacecraft.getPositionFront()) {
+                    case "N":
+                        spacecraft.setPositionFront("E");
+                        break;
+                    case "E":
+                        spacecraft.setPositionFront("S");
+                        break;
+                    case "S":
+                        spacecraft.setPositionFront("W");
+                        break;
+                    default:
+                        spacecraft.setPositionFront("N");
+                        break;
+                }
+            }
 
             spacecraftRepository.save(spacecraft);
         }
 
-        return "";
-    }
-
-    public String moveSpacecraft(MoveSpacecraftDTO moveSpacecraftDTO) {
-
-        SpacecraftEntity spacecraft = spacecraftRepository.getOne(moveSpacecraftDTO.getNameSpacecraft());
-
-        if(moveSpacecraftDTO.getMove().equals("M")) {
-            spacecraft.setPositionH(spacecraft.getPositionH() + 1);
-        } else if(moveSpacecraftDTO.getMove().equals("L")) {
-            if(spacecraft.getPositionFront().equals("N")) {
-                spacecraft.setPositionFront("W");
-            } else if(spacecraft.getPositionFront().equals("E")) {
-                spacecraft.setPositionFront("N");
-            } else if(spacecraft.getPositionFront().equals("S")) {
-                spacecraft.setPositionFront("E");
-            } else {
-                spacecraft.setPositionFront("S");
-            }
-        } else {
-            if(spacecraft.getPositionFront().equals("N")) {
-                spacecraft.setPositionFront("E");
-            } else if(spacecraft.getPositionFront().equals("E")) {
-                spacecraft.setPositionFront("S");
-            } else if(spacecraft.getPositionFront().equals("S")) {
-                spacecraft.setPositionFront("W");
-            } else {
-                spacecraft.setPositionFront("N");
-            }
-        }
-
-        spacecraftRepository.save(spacecraft);
-
-        return "";
+        return "You moved your spacecraft!";
     }
 }
