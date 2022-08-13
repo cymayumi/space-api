@@ -14,11 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class LandSpacecraftsDTO {
 
-    @NotNull
     private String planet;
-
-    @Valid
-    @NotEmpty
     private List<SpacecraftDetailsDTO> spacecraftList;
 
 }

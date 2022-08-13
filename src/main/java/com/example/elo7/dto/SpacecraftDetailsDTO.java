@@ -14,20 +14,9 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class SpacecraftDetailsDTO {
 
-    @NotNull
     private String nameSpacecraft;
-
-    @NotNull
-    @Positive(message = "PositionH must be bigger than 0.")
-    @Max(value = 5, message = "PositionH must be lower than 5.")
     private Integer positionH;
-
-    @NotNull
-    @Positive(message = "PositionV must be bigger than 0.")
-    @Max(value = 5, message = "PositionV must be lower than 5.")
     private Integer positionV;
-
-    @NotNull
     private String positionFront;
 
 }

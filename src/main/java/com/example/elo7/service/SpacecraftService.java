@@ -11,6 +11,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class SpacecraftService {
 
@@ -24,8 +27,9 @@ public class SpacecraftService {
         return spacecraft;
     }
 
-    public String landSpacecrafts(LandSpacecraftsDTO landSpacecraftsDTO) {
+    public List<SpacecraftDTO> landSpacecrafts(LandSpacecraftsDTO landSpacecraftsDTO) {
 
+        List<SpacecraftDTO> listSpacecraftDTO = new ArrayList<>();
         for(SpacecraftDetailsDTO spacecraft : landSpacecraftsDTO.getSpacecraftList()) {
 
             SpacecraftEntity spacecraftEntity = new SpacecraftEntity();
@@ -37,12 +41,16 @@ public class SpacecraftService {
             spacecraftEntity.setPositionV(spacecraft.getPositionV());
 
             spacecraftRepository.save(spacecraftEntity);
+
+            SpacecraftDTO spacecraftDTO = new SpacecraftDTO();
+            BeanUtils.copyProperties(spacecraftEntity, spacecraftDTO);
+            listSpacecraftDTO.add(spacecraftDTO);
         }
 
-        return "Landing was a success!";
+        return listSpacecraftDTO;
     }
 
-    public String moveSpacecraft(MoveSpacecraftDTO moveSpacecraftDTO) throws IncorrectParameterException {
+    public SpacecraftEntity moveSpacecraft(MoveSpacecraftDTO moveSpacecraftDTO) throws IncorrectParameterException {
         String[] moves = moveSpacecraftDTO.getMove().split("");
 
         for(String move : moves) {
@@ -103,6 +111,6 @@ public class SpacecraftService {
             }
         }
 
-        return "You moved your spacecraft!";
+        return spacecraftRepository.findByNameSpacecraft(moveSpacecraftDTO.getNameSpacecraft());
     }
 }
