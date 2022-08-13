@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@RequestMapping(value = "/spacecrafts")
 public class SpacecraftController {
 
     @Autowired
     private SpacecraftService spacecraftService;
 
-    @PostMapping("/land")
+    @PostMapping()
     public ResponseEntity landSpacecraft(@RequestBody LandSpacecraftsDTO landSpacecraftsDTO) {
         try {
             Validation.validateLandingParameters(landSpacecraftsDTO);
@@ -30,7 +31,7 @@ public class SpacecraftController {
         }
     }
 
-    @PutMapping("/move")
+    @PutMapping()
     public ResponseEntity moveSpacecraft(@RequestBody MoveSpacecraftDTO moveSpacecraftDTO) {
         try {
             Validation.validateMoveParameters(moveSpacecraftDTO);
