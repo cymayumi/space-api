@@ -7,7 +7,7 @@ import com.example.elo7.dto.SpacecraftDetailsDTO;
 
 public class Validation {
 
-    public static void validateLanding(LandSpacecraftsDTO landSpacecraftsDTO) throws IncorrectParameterException {
+    public static void validateLandingParameters(LandSpacecraftsDTO landSpacecraftsDTO) throws IncorrectParameterException {
 
         for(SpacecraftDetailsDTO spacecraft : landSpacecraftsDTO.getSpacecraftList()) {
             if(landSpacecraftsDTO.getPlanet() == null || landSpacecraftsDTO.getPlanet().isEmpty()) {
@@ -26,7 +26,7 @@ public class Validation {
         }
     }
 
-    public static void validateMove(MoveSpacecraftDTO moveSpacecraftDTO) throws IncorrectParameterException {
+    public static void validateMoveParameters(MoveSpacecraftDTO moveSpacecraftDTO) throws IncorrectParameterException {
 
         if(moveSpacecraftDTO.getNameSpacecraft() == null || moveSpacecraftDTO.getNameSpacecraft().isEmpty()) {
             throw new IncorrectParameterException("You need to insert your spacecraft name!");

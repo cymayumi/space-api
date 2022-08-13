@@ -35,10 +35,6 @@ public class SpacecraftServiceTest {
     public void initialize() {
         MockitoAnnotations.initMocks(this);
 
-//        List<SpacecraftDetailsDTO> spacecraftList = new ArrayList<SpacecraftDetailsDTO>();
-//        spacecraftList.add(new SpacecraftDetailsDTO("SondaA", 1, 2, "N"));
-//        this.landSpacecrafts = new LandSpacecraftsDTO("Terra", spacecraftList);
-
         this.spacecraftEntity = new SpacecraftEntity();
         spacecraftEntity.setIdSpaceraft(1);
         spacecraftEntity.setNameSpacecraft("SondaA");
@@ -50,14 +46,6 @@ public class SpacecraftServiceTest {
 
     @Test
     public void testGetPositionSpacecraft() {
-//        SpacecraftEntity spacecraft = new SpacecraftEntity();
-//        spacecraft.setIdSpaceraft(1);
-//        spacecraft.setNameSpacecraft("SondaA");
-//        spacecraft.setPlanetName("Terra");
-//        spacecraft.setPositionH(1);
-//        spacecraft.setPositionV(2);
-//        spacecraft.setPositionFront("N");
-
         when(spacecraftRepository.findByNameSpacecraft(anyString())).thenReturn(this.spacecraftEntity);
 
         SpacecraftDTO spacecraftResult = spacecraftService.getSpacecraftPosition("SondaA");

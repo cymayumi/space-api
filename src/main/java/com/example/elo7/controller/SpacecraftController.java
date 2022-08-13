@@ -20,7 +20,7 @@ public class SpacecraftController {
     @PostMapping("/land")
     public ResponseEntity landSpacecraft(@RequestBody LandSpacecraftsDTO landSpacecraftsDTO) {
         try {
-            Validation.validateLanding(landSpacecraftsDTO);
+            Validation.validateLandingParameters(landSpacecraftsDTO);
             return ResponseEntity.status(HttpStatus.OK).body(spacecraftService.landSpacecrafts(landSpacecraftsDTO));
         } catch (IncorrectParameterException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -33,7 +33,7 @@ public class SpacecraftController {
     @PutMapping("/move")
     public ResponseEntity moveSpacecraft(@RequestBody MoveSpacecraftDTO moveSpacecraftDTO) {
         try {
-            Validation.validateMove(moveSpacecraftDTO);
+            Validation.validateMoveParameters(moveSpacecraftDTO);
             return ResponseEntity.status(HttpStatus.OK).body(spacecraftService.moveSpacecraft(moveSpacecraftDTO));
         } catch (IncorrectParameterException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
